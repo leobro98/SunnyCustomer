@@ -18,6 +18,19 @@ If you have some other technologies or skills to demonstrate (e.g. usage of auth
 
 - PHP 8.2
 - MySQL 8
+- Composer
+
+## Installation
+
+```bash
+composer install
+```
+
+## Configure
+
+```
+config/database.php
+```
 
 ## Run
 

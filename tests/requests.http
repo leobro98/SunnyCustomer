@@ -1,0 +1,10 @@
+### Create customer
+
+POST http://localhost:8000/customers
+Content-Type: application/x-www-form-urlencoded
+
+first_name=John&
+last_name=Doe&
+birth_date=1990-01-01&
+user_name=jdoe&
+password=secret

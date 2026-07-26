@@ -1,0 +1,15 @@
+{
+    "name": "leobro/sunny-customer",
+    "description": "Prototype of customer database",
+    "autoload": {
+        "psr-4": {
+            "Leobro\\SunnyCustomer\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Leonid Brodski"
+        }
+    ],
+    "require": {}
+}

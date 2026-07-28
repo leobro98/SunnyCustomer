@@ -30,23 +30,23 @@ final class Response {
 	 */
 	public static function json(array $body, int $statusCode = 200): Response {
 		$response = new Response();
-		$response->setStatusCode($statusCode);
-		$response->setHeader('Content-Type', 'application/json');
-		$response->setBody(json_encode($body, JSON_THROW_ON_ERROR));
+		$response->statusCode = $statusCode;
+		$response->headers['Content-Type'] = 'application/json';
+		$response->body = json_encode($body, JSON_THROW_ON_ERROR);
 		return $response;
 	}
 
 
-	private function setStatusCode(int $statusCode): void {
-		$this->statusCode = $statusCode;
+	public function getStatusCode(): int {
+		return $this->statusCode;
 	}
 
-	private function setHeader(string $name, string $value): void {
-		$this->headers[$name] = $value;
+	public function getHeaderValue(string $name): ?string {
+		return $this->headers[$name] ?? null;
 	}
 
-	private function setBody(string $body): void {
-		$this->body = $body;
+	public function getBody(): string {
+		return $this->body;
 	}
 
 	/**

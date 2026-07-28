@@ -6,10 +6,17 @@
             "Leobro\\SunnyCustomer\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
     "authors": [
         {
             "name": "Leonid Brodski"
         }
     ],
-    "require": {}
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    }
 }

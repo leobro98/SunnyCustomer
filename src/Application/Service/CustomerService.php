@@ -24,8 +24,7 @@ final readonly class CustomerService {
 	 * @param NewCustomer $newCustomer data for customer creation.
 	 * @return Customer customer object created.
 	 */
-	public function createCustomer(NewCustomer $newCustomer): Customer
-	{
+	public function createCustomer(NewCustomer $newCustomer): Customer {
 		if ($this->repository->findByUserName($newCustomer->userName) !== null) {
 			throw new UserAlreadyExistsException($newCustomer->userName);
 		}

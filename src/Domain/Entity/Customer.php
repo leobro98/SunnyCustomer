@@ -6,8 +6,7 @@ namespace Leobro\SunnyCustomer\Domain\Entity;
 
 use DateTimeImmutable;
 
-final class Customer
-{
+final class Customer {
 	public function __construct(
 		public readonly int               $id,
 		public readonly string            $firstName,

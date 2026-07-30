@@ -18,5 +18,8 @@
     ],
     "require-dev": {
         "phpunit/phpunit": "*"
+    },
+    "require": {
+      "ext-pdo": "*"
     }
 }

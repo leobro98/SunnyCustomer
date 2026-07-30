@@ -17,7 +17,7 @@ final class RouteNotFoundException extends RuntimeException {
 	 */
 	public function __construct(string $method, string $path) {
 		parent::__construct(
-			sprintf('No route registered for %s %s.', $method, $path,)
+			sprintf('Route not found: %s %s.', $method, $path,)
 		);
 	}
 }

@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 namespace Leobro\SunnyCustomer\Infrastructure\Database;
 
+use InvalidArgumentException;
 use PDO;
 
 /**
  * Creates and holds a connection to the database.
  */
 class Database {
+
+	const DRIVER_MYSQL = 'mysql';
+	const DRIVER_SQLITE = 'sqlite';
+
 	private ?PDO $connection = null;
 
 	public function __construct(
@@ -32,15 +37,21 @@ class Database {
 	 */
 	private function createConnection(): PDO {
 		$dsn = $this->createDsn();
-		$userName = $this->config['username'];
-		$password = $this->config['password'];
-
-		return new PDO($dsn, $userName, $password,
-			[
+		$options = [
 				PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
 				PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
 				PDO::ATTR_EMULATE_PREPARES => false,
-			]
+		];
+
+		if ($this->config['driver'] === self::DRIVER_SQLITE) {
+			return new PDO($dsn, null, null, $options);
+		}
+
+		return new PDO(
+				$dsn,
+				$this->config['username'],
+				$this->config['password'],
+				$options
 		);
 	}
 
@@ -48,12 +59,26 @@ class Database {
 	 * @return string data source name required to create a connection.
 	 */
 	private function createDsn(): string {
-		$host = $this->config['host'];
-		$port = $this->config['port'];
-		$database = $this->config['database'];
-		$charset = $this->config['charset'];
+		return match ($this->config['driver']) {
+			self::DRIVER_MYSQL => sprintf(
+					'mysql:host=%s;port=%d;dbname=%s;charset=%s',
+					$this->config['host'],
+					$this->config['port'],
+					$this->config['database'],
+					$this->config['charset'],
+			),
 
-		return sprintf('mysql:host=%s;port=%d;dbname=%s;charset=%s',
-			$host, $port, $database, $charset);
+			self::DRIVER_SQLITE => sprintf(
+					'sqlite:%s',
+					$this->config['database'],
+			),
+
+			default => throw new InvalidArgumentException(
+					sprintf(
+							'Unsupported database driver "%s".',
+							$this->config['driver']
+					)
+			)
+		};
 	}
 }

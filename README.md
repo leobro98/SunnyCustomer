@@ -17,13 +17,40 @@ If you have some other technologies or skills to demonstrate (e.g. usage of auth
 ## Requirements
 
 - PHP 8.2
-- MySQL 8
 - Composer
+- MySQL 8 (tests can be run without it)
+
+PHP extensions:
+
+- pdo_mysql
+- pdo_sqlite
+- zip
 
 ## Installation
 
 ```bash
 composer install
+vendor/bin/phpunit
+```
+
+## Database
+
+```mysql
+CREATE DATABASE sunny;
+CREATE USER 'sunny'@'localhost' IDENTIFIED BY 'StrongPassword';
+GRANT ALL PRIVILEGES ON sunny.* TO 'sunny'@'localhost';
+FLUSH PRIVILEGES;
+CREATE TABLE customer (
+    id            BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    first_name    VARCHAR(100) NOT NULL,
+    last_name     VARCHAR(100) NOT NULL,
+    birth_date    DATE NOT NULL,
+    user_name     VARCHAR(100) NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    created_at    DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT uk_customer_user_name UNIQUE (user_name)
+);
 ```
 
 ## Configure
@@ -32,7 +59,13 @@ composer install
 config/database.php
 ```
 
-## Run
+## Running tests
+
+```bash
+vendor/bin/phpunit
+```
+
+## Running application
 
 ```bash
 composer install

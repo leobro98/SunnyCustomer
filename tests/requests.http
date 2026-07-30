@@ -3,8 +3,8 @@
 POST http://localhost:8000/customers
 Content-Type: application/x-www-form-urlencoded
 
-first_name=John&
-last_name=Doe&
-birth_date=1990-01-01&
-user_name=jdoe&
-password=secret
+first_name=Elisabeth&
+last_name=Windsor&
+birth_date=1926-04-21&
+user_name=qelisabeth&
+password=thequeen

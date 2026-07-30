@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Infrastructure\Http\Mapper;
+namespace Tests\Unit\Infrastructure\Http\Mapper;
 
 use DateTimeImmutable;
 use Leobro\SunnyCustomer\Exception\DateFormatException;

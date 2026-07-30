@@ -4,13 +4,21 @@ declare(strict_types=1);
 
 namespace Leobro\SunnyCustomer\Infrastructure\Http;
 
+use JsonException;
 use Leobro\SunnyCustomer\Exception\RouteAlreadyRegisteredException;
 use Leobro\SunnyCustomer\Exception\RouteNotFoundException;
+use Throwable;
 
 /**
  * Registers handlers for different HTTP requests and dispatches coming request to the handler.
  */
 final class Router {
+
+	public function __construct(
+			private readonly ExceptionHandler $exceptionHandler,
+	) {
+	}
+
 	/**
 	 * @var array<string, array<string, callable>>
 	 */
@@ -18,6 +26,7 @@ final class Router {
 
 	/**
 	 * Registers handlers for GET requests.
+	 *
 	 * @param string $path HTTP request path.
 	 * @param callable $handler request handler.
 	 * @return void
@@ -28,6 +37,7 @@ final class Router {
 
 	/**
 	 * Registers handlers for POST requests.
+	 *
 	 * @param string $path HTTP request path.
 	 * @param callable $handler request handler.
 	 * @return void
@@ -38,6 +48,7 @@ final class Router {
 
 	/**
 	 * Registers handlers for PUT requests.
+	 *
 	 * @param string $path HTTP request path.
 	 * @param callable $handler request handler.
 	 * @return void
@@ -48,6 +59,7 @@ final class Router {
 
 	/**
 	 * Registers handlers for DELETE requests.
+	 *
 	 * @param string $path HTTP request path.
 	 * @param callable $handler request handler.
 	 * @return void
@@ -58,17 +70,23 @@ final class Router {
 
 	/**
 	 * Dispatches a request to its handler.
+	 *
 	 * @param Request $request wrapper of HTTP request.
 	 * @return Response result of the request execution.
+	 * @throws JsonException on any errors of the object encoding into JSON.
 	 */
 	public function handle(Request $request): Response {
-		$handler = $this->routes[$request->method][$request->path] ?? null;
+		try {
+			$handler = $this->routes[$request->method][$request->path] ?? null;
 
-		if ($handler === null) {
-			throw new RouteNotFoundException($request->method, $request->path);
+			if ($handler === null) {
+				throw new RouteNotFoundException($request->method, $request->path);
+			}
+
+			return $handler($request);
+		} catch (Throwable $exception) {
+			return $this->exceptionHandler->handle($exception);
 		}
-
-		return $handler($request);
 	}
 
 	private function register(string $method, string $path, callable $handler): void {

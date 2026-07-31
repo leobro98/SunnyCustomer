@@ -71,7 +71,7 @@ composer install
 composer install
 ```
 
-## Database
+### Database
 
 MySQL:
 ```mysql

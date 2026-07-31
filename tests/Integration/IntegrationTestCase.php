@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Integration;
 
+use Leobro\SunnyCustomer\Domain\Entity\Customer;
 use Leobro\SunnyCustomer\Domain\Repository\CustomerRepository;
 use Leobro\SunnyCustomer\Infrastructure\Database\Database;
 use Leobro\SunnyCustomer\Infrastructure\Persistence\PdoCustomerRepository;
@@ -52,5 +53,18 @@ class IntegrationTestCase extends TestCase {
 
 	private function schemaFile(): string {
 		return dirname(__DIR__, 2) . '/resources/sql/schema.sqlite.sql';
+	}
+
+
+	protected function assertIdsAscending(array $customers): void {
+		$customerIds = array_map(
+				static fn(Customer $customer) => $customer->id,
+				$customers
+		);
+
+		$sortedIds = $customerIds;
+		sort($sortedIds);
+
+		self::assertSame($customerIds, $sortedIds);
 	}
 }

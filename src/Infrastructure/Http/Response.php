@@ -23,6 +23,7 @@ final class Response {
 
 	/**
 	 * Creates a new {@link  Response} object with JSON content from output data.
+	 *
 	 * @param array $body response body.
 	 * @param int $statusCode response status code.
 	 * @return Response reponse object ready for sending.
@@ -33,6 +34,19 @@ final class Response {
 		$response->statusCode = $statusCode;
 		$response->headers['Content-Type'] = 'application/json';
 		$response->body = json_encode($body, JSON_THROW_ON_ERROR);
+		return $response;
+	}
+
+	/**
+	 * Creates a new empty {@link  Response} object.
+	 *
+	 * @param int $statusCode response status code.
+	 * @return Response reponse object ready for sending.
+	 */
+	public static function empty(int $statusCode): Response {
+		$response = new Response();
+		$response->statusCode = $statusCode;
+		$response->headers['Content-Type'] = 'application/json';
 		return $response;
 	}
 

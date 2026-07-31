@@ -13,13 +13,18 @@ use Leobro\SunnyCustomer\Infrastructure\Persistence\PdoCustomerRepository;
 /**
  * Composition root for the application. Creates all needed components.
  */
-final class Bootstrap {
+final readonly class Bootstrap {
 
 	public function __construct(
-		private readonly array $config
+		private array $config
 	) {
 	}
 
+	/**
+	 * Creates all application objects and returns a composition root.
+	 *
+	 * @return Router object that can handle HTTP requests.
+	 */
 	public function createRouter(): Router {
 		$database = new Database($this->config);
 		$customerRepository = new PdoCustomerRepository(pdo: $database->getConnection());
@@ -29,6 +34,8 @@ final class Bootstrap {
 		$router = new Router();
 		$router->registerPost('/customers', [$customerController, 'createCustomer']);
 		$router->registerGet('/customers', [$customerController, 'listCustomers']);
+		$router->registerPut('/customers', [$customerController, 'updateCustomer']);
+		$router->registerDelete('/customers', [$customerController, 'deleteCustomer']);
 
 		return $router;
 	}

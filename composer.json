@@ -20,6 +20,7 @@
         "phpunit/phpunit": "*"
     },
     "require": {
-      "ext-pdo": "*"
+        "ext-pdo": "*",
+        "ext-ctype": "*"
     }
 }

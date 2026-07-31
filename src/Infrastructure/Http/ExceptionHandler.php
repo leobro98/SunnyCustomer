@@ -31,13 +31,19 @@ final class ExceptionHandler {
 	];
 
 	/**
+	 * Exists to prevent instance creation as all methods are static.
+	 */
+	private function __construct() {
+	}
+
+	/**
 	 * Translates exception into response.
 	 *
 	 * @param Throwable $exception internal project exception.
 	 * @return Response response object with JSON body and HTTP status.
 	 * @throws JsonException on any errors of the object encoding into JSON.
 	 */
-	public function handle(Throwable $exception): Response {
+	public static function handle(Throwable $exception): Response {
 		$statusCode = self::EXCEPTION_STATUS_CODES[$exception::class] ?? 500;
 
 		$message = $statusCode === 500

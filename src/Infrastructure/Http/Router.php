@@ -14,11 +14,6 @@ use Throwable;
  */
 final class Router {
 
-	public function __construct(
-			private readonly ExceptionHandler $exceptionHandler,
-	) {
-	}
-
 	/**
 	 * @var array<string, array<string, callable>>
 	 */
@@ -85,7 +80,7 @@ final class Router {
 
 			return $handler($request);
 		} catch (Throwable $exception) {
-			return $this->exceptionHandler->handle($exception);
+			return ExceptionHandler::handle($exception);
 		}
 	}
 

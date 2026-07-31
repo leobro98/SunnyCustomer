@@ -1,6 +1,13 @@
 # SunnyCustomer
 
-Test assignment written in PHP 8.2.
+SunnyCustomer is a small CRUD application created as a PHP backend test assignment.
+
+Features:
+
+- create customer
+- edit customer
+- delete customer
+- list customers
 
 ## Assignment text
 
@@ -14,27 +21,59 @@ Test assignment written in PHP 8.2.
 
 If you have some other technologies or skills to demonstrate (e.g. usage of authentication system), then it gives extra points.
 
+## Architecture
+
+The application follows a layered architecture:
+
+```
+HTTP
+ ├── Router
+ ├── Controllers
+ ├── ExceptionHandler
+ │
+Service layer (business logic)
+ │
+Persistence layer
+ ├── CustomerRepository PDO implementation
+ │
+MySQL / SQLite
+```
+
+Main principles:
+
+- strict typing (`declare(strict_types=1)`);
+- dependency injection;
+- repository pattern;
+- service layer;
+- centralized exception handling;
+- unit and integration tests.
+
 ## Requirements
 
-- PHP 8.2
+- PHP 8.2+
 - Composer
 - MySQL 8 (tests can be run without it)
 
-PHP extensions:
+The following PHP extensions must be enabled:
 
-- pdo_mysql
-- pdo_sqlite
-- zip
+- PDO MySQL
+- PDO SQLite (used by integration tests)
+
+Install dependencies before running the application:
+
+```bash
+composer install
+```
 
 ## Installation
 
 ```bash
 composer install
-vendor/bin/phpunit
 ```
 
 ## Database
 
+MySQL:
 ```mysql
 CREATE DATABASE sunny;
 CREATE USER 'sunny'@'localhost' IDENTIFIED BY 'StrongPassword';
@@ -55,9 +94,133 @@ CREATE TABLE customer (
 
 ## Configure
 
+Edit
+
 ```
 config/database.php
 ```
+
+and configure:
+
+- host
+- database
+- user
+- password
+
+Integration tests use SQLite and do not require MySQL.
+
+The SQLite database is created automatically in
+
+```
+var/test.sqlite
+```
+
+## Running application
+
+```bash
+php -S localhost:8000 -t public
+```
+
+Open the application in browser:
+
+```
+http://localhost:8000
+```
+
+## HTTP API
+
+### List customers
+
+```http
+GET /customers
+```
+
+Response:
+
+```json
+[
+  {
+    "id": 1,
+    "first_name": "John",
+    "last_name": "Doe",
+    "birth_date": "1990-01-01",
+    "user_name": "jdoe"
+  }
+]
+```
+
+---
+
+### Create customer
+
+```http
+POST /customers
+```
+
+Request body:
+
+```json
+{
+  "first_name": "John",
+  "last_name": "Doe",
+  "birth_date": "1990-01-01",
+  "user_name": "jdoe",
+  "password": "secret"
+}
+```
+
+Response:
+
+```
+201 Created
+```
+
+---
+
+### Update customer
+
+```http
+PUT /customers/{id}
+```
+
+Request body:
+
+```json
+{
+  "first_name": "Johnny",
+  "last_name": "Doe",
+  "birth_date": "1992-02-02",
+  "user_name": "johnny"
+}
+```
+
+Response:
+
+```
+204 No Content
+```
+
+---
+
+### Delete customer
+
+```http
+DELETE /customers/{id}
+```
+
+Response:
+
+```
+204 No Content
+```
+
+## Tests
+
+The project contains:
+
+- unit tests for service layer;
+- integration tests for repository layer;
+- HTTP integration tests for controllers.
 
 ## Running tests
 
@@ -65,13 +228,13 @@ config/database.php
 vendor/bin/phpunit
 ```
 
-## Running application
 
-```bash
-composer install
-php -S localhost:8000 -t public
+## HTTP request examples
+
+Sample requests are available in
+
+```
+requests.http
 ```
 
-## Test request
-
-Use `requests.http`.
+The file can be executed directly from PhpStorm.

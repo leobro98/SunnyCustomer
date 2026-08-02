@@ -1,10 +1,32 @@
+### List customers
+
+GET http://localhost:8000/customers
+
 ### Create customer
 
 POST http://localhost:8000/customers
-Content-Type: application/x-www-form-urlencoded
+Content-Type: application/json
 
-first_name=Elisabeth&
-last_name=Windsor&
-birth_date=1926-04-21&
-user_name=qelisabeth&
-password=thequeen
+{
+  "first_name": "Julia",
+  "last_name": "Roberts",
+  "birth_date": "1966-10-28",
+  "user_name": "rjulia66@hotmail.com",
+  "password": "julia1234"
+}
+
+### Update customer
+
+PUT http://localhost:8000/customers/6
+Content-Type: application/json
+
+{
+  "first_name": "Johnny",
+  "last_name": "Doe",
+  "birth_date": "1992-02-02",
+  "user_name": "johnny"
+}
+
+### Delete customer
+
+DELETE http://localhost:8000/customers/6

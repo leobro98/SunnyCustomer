@@ -12,15 +12,6 @@ use RuntimeException;
 final class CustomerNotFoundException extends RuntimeException {
 
 	/**
-	 * @param string $userName user name of the not found customer.
-	 */
-	public function __construct(string $userName) {
-		parent::__construct(
-			sprintf('Customer "%s" not found.', $userName)
-		);
-	}
-
-	/**
 	 * Creates an instance of the exception with message about ID.
 	 *
 	 * @param int $id ID of the customer which is not found.

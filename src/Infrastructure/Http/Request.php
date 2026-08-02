@@ -39,17 +39,27 @@ final readonly class Request {
 			$path = '/' . implode('/', $segments);
 		}
 
+		$method = strtoupper($_SERVER['REQUEST_METHOD']);
+		$post = self::extractPost($method);
+
 		return new self(
-				method: strtoupper($_SERVER['REQUEST_METHOD']),
+				method: $method,
 				path: $path,
 				query: $query,
-				post: $_POST
+				post: $post
 		);
 	}
 
 	private static function extractPath($uri): string {
 		$path = parse_url($uri, PHP_URL_PATH);
 		return is_string($path) ? $path : '/';
+	}
+
+	public static function extractPost(string $method): mixed {
+		$json = file_get_contents('php://input');
+		return $method === 'POST' || $method === 'PUT' || $method === 'PATCH' ?
+				json_decode($json, true)
+				: [];
 	}
 
 	/**

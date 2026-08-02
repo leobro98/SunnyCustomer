@@ -40,7 +40,7 @@ final readonly class Request {
 		}
 
 		$method = strtoupper($_SERVER['REQUEST_METHOD']);
-		$post = self::extractPost($method);
+		$post = self::extractPost();
 
 		return new self(
 				method: $method,
@@ -55,11 +55,16 @@ final readonly class Request {
 		return is_string($path) ? $path : '/';
 	}
 
-	public static function extractPost(string $method): mixed {
-		$json = file_get_contents('php://input');
-		return $method === 'POST' || $method === 'PUT' || $method === 'PATCH' ?
-				json_decode($json, true)
-				: [];
+	public static function extractPost(): mixed {
+		$contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+
+		if (str_contains($contentType, 'application/json')) {
+			$json = file_get_contents('php://input');
+			$post = json_decode($json, true) ?? [];
+		} else {
+			$post = $_POST;
+		}
+		return $post;
 	}
 
 	/**

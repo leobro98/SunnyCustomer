@@ -25,10 +25,10 @@
 					{{ customer.userName }}
 				</td>
 				<td>
-					<button @click="">
+					<button @click="emit('edit', customer)">
 						Edit
 					</button>
-					<button @click="">
+					<button @click="emit('delete', customer)">
 						Delete
 					</button>
 				</td>
@@ -38,8 +38,16 @@
 </template>
 
 <script setup>
+const emit = defineEmits([
+		'edit',
+		'delete'
+]);
+
 const { customers } = defineProps({
-	customers: Array,
+	customers: {
+		type: Array,
+		required: true
+	}
 });
 </script>
 

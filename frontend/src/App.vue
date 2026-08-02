@@ -19,22 +19,32 @@
 				<label>Username</label>
 				<input v-model="userName">
 			</div>
-			<div>
-				<label>Password</label>
-				<input type="password" v-model="password">
+			<div class="password-row">
+				<div v-if="editId === null">
+					<label>Password</label>
+					<input type="password" v-model="password">
+				</div>
 			</div>
-
-			<button @click="submitForm()">
-				{{ editId === null ? 'Create' : 'Save' }}
-			</button>
+			<div class="button-row">
+				<button @click="submitForm()">
+					{{ editId === null ? 'Create' : 'Save' }}
+				</button>
+				<button v-if="editId !== null" @click="clearForm()">
+					Cancel
+				</button>
+			</div>
 		</div>
 
-		<CustomerTable :customers="customers"/>
+		<CustomerTable
+				:customers="customers"
+				@edit="editCustomer"
+				@delete="deleteCustomer"
+		/>
 	</div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import {onMounted, ref} from 'vue';
 import CustomerTable from './components/CustomerTable.vue';
 import CustomerApi from "./services/CustomerApi.js";
 
@@ -66,30 +76,76 @@ function clearForm() {
 	editId.value = null;
 }
 
-function createCustomerRequest() {
+function createNewCustomerRequest() {
 	return {
 		first_name: firstName.value,
 		last_name: lastName.value,
 		birth_date: birthDate.value,
 		user_name: userName.value,
-		password: password.value,
+		password: password.value
+	};
+}
+
+function createUpdatedCustomerRequest() {
+	return {
+		first_name: firstName.value,
+		last_name: lastName.value,
+		birth_date: birthDate.value,
+		user_name: userName.value
 	};
 }
 
 async function submitForm() {
-	await CustomerApi.createCustomer(
-			createCustomerRequest()
-	);
+	if (editId.value === null) {
+		await CustomerApi.createCustomer(
+				createNewCustomerRequest()
+		);
+	} else {
+		await CustomerApi.updateCustomer(
+				editId.value,
+				createUpdatedCustomerRequest()
+		);
+	}
+
 	await reloadCustomers();
 	clearForm();
+}
+
+function editCustomer(customer) {
+	editId.value = customer.id;
+
+	firstName.value = customer.firstName;
+	lastName.value = customer.lastName;
+	birthDate.value = customer.birthDate;
+	userName.value = customer.userName;
+	password.value = '';
+}
+
+function deleteCustomer(customer) {
+	editId.value = customer.id;
 }
 </script>
 
 <style>
+label {
+	display: inline-block;
+	width: 120px;
+}
+input {
+	width: 250px;
+}
+
 .container {
 	width: 900px;
 	margin: 40px auto;
 	font-family: Arial, sans-serif;
+}
+.button-row {
+	display: flex;
+	gap: 10px;
+}
+.button-row > button {
+	width: 80px;
 }
 .form {
 	margin-bottom: 30px;
@@ -97,11 +153,7 @@ async function submitForm() {
 .form > div {
 	margin-bottom: 10px;
 }
-label {
-	display: inline-block;
-	width: 120px;
-}
-input {
-	width: 250px;
+.password-row {
+	min-height: 40px;
 }
 </style>

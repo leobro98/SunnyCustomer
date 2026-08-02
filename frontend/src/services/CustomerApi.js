@@ -3,7 +3,6 @@ import Customer from '../models/Customer';
 export default class CustomerApi {
 
     static async getCustomers() {
-
         const response = await fetch('/customers');
 
         if (!response.ok) {
@@ -17,14 +16,34 @@ export default class CustomerApi {
     static async createCustomer(request) {
         const response = await fetch('/customers', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(request)
         });
 
         if (!response.ok) {
             throw new Error('Unable to create customer');
+        }
+    }
+
+    static async updateCustomer(id, request) {
+        const response = await fetch(`/customers/${id}`, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(request),
+        });
+
+        if (!response.ok) {
+            throw new Error('Unable to update customer');
+        }
+    }
+
+    static async deleteCustomer(id) {
+        const response = await fetch(`/customers/${id}`, {
+            method: 'DELETE'
+        });
+
+        if (!response.ok) {
+            throw new Error('Unable to update customer');
         }
     }
 }

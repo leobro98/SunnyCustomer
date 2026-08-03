@@ -6,7 +6,8 @@ export default class CustomerApi {
         const response = await fetch('/customers');
 
         if (!response.ok) {
-            throw new Error('Unable to load customers');
+            const error = await response.json();
+            throw new Error(error.message);
         }
 
         const body = await response.json();
@@ -21,7 +22,8 @@ export default class CustomerApi {
         });
 
         if (!response.ok) {
-            throw new Error('Unable to create customer');
+            const error = await response.json();
+            throw new Error(error.message);
         }
     }
 
@@ -33,7 +35,8 @@ export default class CustomerApi {
         });
 
         if (!response.ok) {
-            throw new Error('Unable to update customer');
+            const error = await response.json();
+            throw new Error(error.message);
         }
     }
 
@@ -43,7 +46,8 @@ export default class CustomerApi {
         });
 
         if (!response.ok) {
-            throw new Error('Unable to update customer');
+            const error = await response.json();
+            throw new Error(error.message);
         }
     }
 }

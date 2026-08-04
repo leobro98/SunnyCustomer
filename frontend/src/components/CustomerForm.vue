@@ -84,7 +84,7 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue';
+import { reactive, watch } from 'vue';
 
 const customer = defineModel('customer');
 
@@ -99,6 +99,10 @@ const errors = reactive({
 	userName: '',
 	password: '',
 });
+
+watch(() => customer.value.id,
+		() => { clearErrors(); }
+);
 
 const emit = defineEmits([
 	'submit',

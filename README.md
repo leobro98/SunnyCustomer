@@ -284,7 +284,7 @@ Start the backend separately:
 php -S localhost:8000 -t public
 ```
 
-For full-fledged application work you will both these servers and also running MySQL server with ```sunny``` database.
+For full-fledged application work you will need both these servers and also running MySQL server with ```sunny``` database.
 
 ### Frontend functionality
 

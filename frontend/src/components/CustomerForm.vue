@@ -1,6 +1,7 @@
 <template>
 	<div class="form">
 		<table>
+			<tbody>
 			<tr>
 				<td>
 					<div>
@@ -79,6 +80,7 @@
 					</div>
 				</td>
 			</tr>
+			</tbody>
 		</table>
 	</div>
 </template>
